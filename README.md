@@ -13,7 +13,7 @@ a gita verse in your omarchy bar. that's it.
 - save favourites with notes, mark verses read, streak + totals
 - 701 verses offline, purohit + sivananda translations
 
-| today | browse |
+|  |  |
 | :-: | :-: |
 | ![today](today.png) | ![browse](browse.png) |
 | ![saved](saved.png) | ![settings](settings.png) |
