@@ -1,0 +1,17 @@
+module GeetaBar.Components
+
+singleton Strings 1.0 Strings.qml
+singleton Theme 1.0 Theme.qml
+singleton GitaData 1.0 GitaData.qml
+singleton Store 1.0 Store.qml
+
+PixelText 1.0 PixelText.qml
+BarMeter 1.0 BarMeter.qml
+ChapterChart 1.0 ChapterChart.qml
+Lotus 1.0 Lotus.qml
+IconButton 1.0 IconButton.qml
+TabRail 1.0 TabRail.qml
+SettingsDivider 1.0 SettingsDivider.qml
+SettingsToggleRow 1.0 SettingsToggleRow.qml
+SettingsSelectRow 1.0 SettingsSelectRow.qml
+GeetaPopup 1.0 GeetaPopup.qml

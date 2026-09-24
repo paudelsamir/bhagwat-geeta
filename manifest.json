@@ -1,0 +1,176 @@
+{
+  "schemaVersion": 1,
+  "id": "paudelsamir.bhagwat-geeta",
+  "name": "Bhagwat Geeta Bar",
+  "version": "0.1.0",
+  "author": "yourname",
+  "license": "MIT",
+  "description": "A Bhagavad Gita bar widget for Omarchy — verse of the day, browse all 18 chapters, and save favourites. Krishna-themed.",
+  "homepage": "https://github.com/yourname/geeta-bar",
+  "kinds": [
+    "bar-widget"
+  ],
+  "entryPoints": {
+    "barWidget": "Widget.qml"
+  },
+  "barWidget": {
+    "displayName": "Bhagwat Geeta",
+    "category": "lifestyle",
+    "allowMultiple": false,
+    "defaultSection": "right",
+    "defaults": {
+      "displayMode": "icon-only",
+      "iconStyle": "book",
+      "fontSize": "small",
+      "iconSize": "small",
+      "glow": true,
+      "translator": "purohit",
+      "verseMode": "daily",
+      "chapter": 2,
+      "theme": "peacock",
+      "animationLevel": "none",
+      "reminderEnabled": false,
+      "reminderTime": "07:00",
+      "showDevanagari": true,
+      "showTransliteration": false
+    },
+    "schema": [
+      {
+        "key": "displayMode",
+        "type": "enum",
+        "label": "Bar content",
+        "description": "What the bar pill shows.",
+        "options": [
+          "icon-only",
+          "icon-and-verse"
+        ],
+        "defaultValue": "icon-and-verse"
+      },
+      {
+        "key": "iconStyle",
+        "type": "enum",
+        "label": "Bar icon",
+        "description": "Glyph drawn next to the verse reference.",
+        "options": [
+          "om",
+          "book",
+          "flame",
+          "none"
+        ],
+        "defaultValue": "om"
+      },
+      {
+        "key": "iconSize",
+        "type": "enum",
+        "label": "Icon size",
+        "description": "Bar glyph size, independent of the verse text size.",
+        "options": [
+          "small",
+          "medium",
+          "large"
+        ],
+        "defaultValue": "medium"
+      },
+      {
+        "key": "fontSize",
+        "type": "enum",
+        "label": "Bar font size",
+        "options": [
+          "small",
+          "medium",
+          "large"
+        ],
+        "defaultValue": "medium"
+      },
+      {
+        "key": "glow",
+        "type": "boolean",
+        "label": "Unread highlight",
+        "description": "Show unread verses in gold; read ones sit in the bar foreground.",
+        "defaultValue": true
+      },
+      {
+        "key": "translator",
+        "type": "enum",
+        "label": "Default translator",
+        "options": [
+          "purohit",
+          "sivananda"
+        ],
+        "defaultValue": "purohit"
+      },
+      {
+        "key": "verseMode",
+        "type": "enum",
+        "label": "Verse selection",
+        "description": "Daily rotation, a stable random draw per day, or a daily rotation inside one chapter.",
+        "options": [
+          "daily",
+          "random",
+          "chapter"
+        ],
+        "defaultValue": "daily"
+      },
+      {
+        "key": "chapter",
+        "type": "integer",
+        "label": "Chapter focus",
+        "description": "Used when verse selection is Chapter focus.",
+        "min": 1,
+        "max": 18,
+        "step": 1,
+        "defaultValue": 1
+      },
+      {
+        "key": "theme",
+        "type": "enum",
+        "label": "Colour theme",
+        "options": [
+          "followOmarchy",
+          "krishnaBlue",
+          "peacock",
+          "gold",
+          "monochrome"
+        ],
+        "defaultValue": "followOmarchy"
+      },
+      {
+        "key": "animationLevel",
+        "type": "enum",
+        "label": "Animation level",
+        "options": [
+          "full",
+          "reduced",
+          "none"
+        ],
+        "defaultValue": "full"
+      },
+      {
+        "key": "reminderEnabled",
+        "type": "boolean",
+        "label": "Daily reminder",
+        "description": "Desktop notification with the day's verse.",
+        "defaultValue": false
+      },
+      {
+        "key": "reminderTime",
+        "type": "string",
+        "label": "Reminder time",
+        "description": "24-hour HH:MM.",
+        "defaultValue": "07:00"
+      },
+      {
+        "key": "showDevanagari",
+        "type": "boolean",
+        "label": "Show Devanagari",
+        "defaultValue": true
+      },
+      {
+        "key": "showTransliteration",
+        "type": "boolean",
+        "label": "Show transliteration",
+        "defaultValue": true
+      }
+    ]
+  }
+}
