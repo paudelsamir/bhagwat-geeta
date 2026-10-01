@@ -11,7 +11,9 @@ import "components"
 //   - WidgetButton (qs.Ui) is the native bar-button surface: hover tracking,
 //     tooltip plumbing and click-target registration come free.
 //   - bar.showTooltip(target, text) / bar.hideTooltip(target)
-//   - bar.run(command) -> bash -lc (shell features like pipes work)
+//   - bar.run(command) -> bash -lc (shell features like pipes work). Only for
+//     fixed commands: it runs a real shell, so never interpolate user data into
+//     it. Use Quickshell.execDetached(argv) or Quickshell.clipboardText instead.
 //   - Popup content lives in a KeyboardPanel (own window); the bar window
 //     clips oversized children, so the popup must NOT be a bar child.
 //
@@ -147,12 +149,12 @@ Panel {
             var hhmm = String(now.getHours()).padStart(2, "0") + ":" + String(now.getMinutes()).padStart(2, "0")
             if (hhmm === (liveSettings.reminderTime || "07:00") && !root.readToday) {
                 var v = root.currentVerse
-                if (v && root.bar && root.bar.run) {
+                if (v) {
                     var body = (v.translations && (v.translations.purohit || v.translations.sivananda)) || ""
-                    var safeBody = body.replace(/'/g, "'\\''")
-                    root.bar.run("notify-send " +
-                        "'Bhagwat Geeta \u2014 " + v.chapter + "." + v.verse + "' " +
-                        "'" + safeBody + "'")
+                    // argv form: notify-send gets the text as bytes, no shell
+                    // quoting involved.
+                    Quickshell.execDetached(["notify-send",
+                        "Bhagwat Geeta \u2014 " + v.chapter + "." + v.verse, body])
                 }
             }
         }
@@ -231,11 +233,12 @@ Panel {
     }
 
     function copyText(text, note) {
-        if (!root.bar || !root.bar.run) return
-        // Shell-quoted single-arg pipe: never interpolate unescaped text into a command string.
-        var escaped = String(text).replace(/'/g, "'\\''")
-        root.bar.run("bash -c \"printf '%s' '" + escaped + "' | wl-copy\"")
-        if (root.bar.showTooltip) root.bar.showTooltip(button, note || Strings.copied)
+        // Clipboard via Quickshell, never via a shell. User-written favourite
+        // notes reach this function (Saved tab export), and bar.run is
+        // `bash -lc`: text placed inside its double quotes has $(...), backticks
+        // and $VAR expanded by the outer shell before any copy tool runs.
+        Quickshell.clipboardText = String(text)
+        if (root.bar && root.bar.showTooltip) root.bar.showTooltip(button, note || Strings.copied)
     }
 
     function copyVerse(v) {
@@ -280,17 +283,17 @@ Panel {
     }
 
     function applySetting(key, value) {
-        // Persist natively via the Omarchy CLI (bar.run -> bash -lc), which
-        // writes the widget's inline shell.json entry. The shell then pushes
-        // the new `settings` object back into this widget.
-        if (root.bar && root.bar.run) {
-            var safeKey = String(key).replace(/'/g, "")
-            var safeVal = String(value).replace(/'/g, "'\\''")
-            // --json keeps booleans/numbers typed in shell.json instead of
-            // degrading them to "true"/"false" strings.
-            var jsonFlag = (typeof value === "boolean" || typeof value === "number") ? " --json" : ""
-            root.bar.run("omarchy bar set '" + root.moduleName + "' '" + safeKey + "' '" + safeVal + "'" + jsonFlag)
-        }
+        // Persist natively via the Omarchy CLI, which writes the widget's inline
+        // shell.json entry. The shell then pushes the new `settings` object back
+        // into this widget.
+        //
+        // argv form: no shell parses these values, so there is no quoting to get
+        // wrong and nothing to escape.
+        // --json keeps booleans/numbers typed in shell.json instead of degrading
+        // them to "true"/"false" strings.
+        var argv = ["omarchy", "bar", "set", String(root.moduleName), String(key), String(value)]
+        if (typeof value === "boolean" || typeof value === "number") argv.push("--json")
+        Quickshell.execDetached(argv)
         // Update the live in-memory copy immediately so the UI feels instant
         // even before the round-trip above completes.
         var next = Object.assign({}, root.liveSettings)

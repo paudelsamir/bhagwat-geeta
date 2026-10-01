@@ -24,7 +24,8 @@ a gita verse in your omarchy bar. that's it.
 omarchy plugin add https://github.com/paudelsamir/bhagwat-geeta --enable
 ```
 
-needs `wl-clipboard` for copy (already on omarchy).
+no external dependencies. copy uses Quickshell's built-in clipboard, so
+`wl-clipboard` is not required.
 
 ## remove
 
